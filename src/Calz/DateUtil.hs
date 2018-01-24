@@ -1,7 +1,7 @@
 module Calz.DateUtil where
 
-import Data.Time
-import Data.Time.Calendar.WeekDate
+import           Data.Time
+import           Data.Time.Calendar.WeekDate
 
 uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
 uncurry3 f (x, y, z) = f x y z
@@ -66,4 +66,3 @@ thisMonth day = firstDayOfMonth . getMonth $ day
 
 nextMonth :: Day -> Day
 nextMonth = addMonth . thisMonth
-

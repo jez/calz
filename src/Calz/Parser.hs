@@ -1,14 +1,14 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE FlexibleContexts #-}
 
 module Calz.Parser (parsePhrase, parseWithEof) where
 
+import           Control.Monad.Reader
+import           Data.Char            (toLower)
+import qualified Data.Text            as T
 import           Data.Time
 import           Text.Parsec
-import           Control.Monad.Reader
-import qualified Data.Text as T
-import           Data.Char (toLower)
 
 import           Calz.DateUtil
 import           Calz.Types
@@ -110,9 +110,9 @@ oneThruTen =
 nUnits :: (Integral a, Read a) => T.Text -> M a
 nUnits unit = do
   number <* spaces1 <* text unit <* optional (char 's')
-  where
-    number :: (Integral a, Read a) => M a
-    number = try (read <$> many1 digit) <|> try oneThruTen
+ where
+  number :: (Integral a, Read a) => M a
+  number = try (read <$> many1 digit) <|> try oneThruTen
 
 relativeUnit :: (Integral a, Read a) => T.Text -> M a
 relativeUnit unit = do
@@ -139,7 +139,7 @@ relativeYears = do
 
 lastNextNMonths :: M DatePhrase
 lastNextNMonths = do
-  today <- ask
+  today  <- ask
   -- This is a clever trick: premultiply lastThisNext offset into 'n'
   -- (so nUnits can be forwards OR backwards)
   offset <- ((*) <$> lastThisNext <*> (spaces1 *> nUnits "month"))
@@ -192,9 +192,8 @@ simpleOrCompoundPhrase :: M DatePhrase
 simpleOrCompoundPhrase = try simplePhrase <|> try compoundPhrase
 
 parseWith :: Day -> M a -> T.Text -> Either ParseError a
-parseWith today parser phrase = runReader
-  (runParserT parser () "(unknown)" (T.toLower phrase))
-  today
+parseWith today parser phrase =
+  runReader (runParserT parser () "(unknown)" (T.toLower phrase)) today
 
 -- | Just for testing; hard codes 18 Jan 2018 for convenience
 parseWithEof :: M a -> T.Text -> Either ParseError a

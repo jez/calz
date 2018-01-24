@@ -3,12 +3,12 @@
 
 module Main where
 
+import           Data.List                                 (intercalate)
+import qualified Data.Text                                 as T
+import           Data.Text.Prettyprint.Doc.Render.Terminal (putDoc)
 import           Data.Time
 import           System.Console.Docopt
-import           System.Environment    (getArgs)
-import           Data.List (intercalate)
-import qualified Data.Text as T
-import           Data.Text.Prettyprint.Doc.Render.Terminal (putDoc)
+import           System.Environment                        (getArgs)
 
 import           Calz.DateUtil
 import           Calz.Formatter
@@ -79,17 +79,15 @@ main = do
   today <- localDay . zonedTimeToLocalTime <$> getZonedTime
 
   let phrase = T.pack $ intercalate " " . getAllArgs args $ argument "phrase"
-  fromTo <-
-    if getArgCount args (argument "phrase") == 0
-      then
-        let start = thisMonth today
-            end = addMonth start
-         in return $ DatePhrase start end
-      else case parsePhrase today phrase of
-        Left err -> do
-          print err
-          exitWithUsage patterns
-        Right ft -> return ft
+  fromTo <- if getArgCount args (argument "phrase") == 0
+    then
+      let start = thisMonth today
+          end   = addMonth start
+      in  return $ DatePhrase start end
+    else case parsePhrase today phrase of
+      Left err -> do
+        print err
+        exitWithUsage patterns
+      Right ft -> return ft
 
   putDoc $ runFormatCalendar config fromTo today
-

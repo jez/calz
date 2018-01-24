@@ -1,19 +1,19 @@
 module Calz.Formatter (runFormatCalendar, runFormatCalendarDebug) where
 
-import           Data.Function ((&))
-import           Data.Time
-import           Data.List (groupBy)
+import           Control.Monad.Reader
+import           Data.Function                             ((&))
+import           Data.List                                 (groupBy)
 import           Data.Text.Prettyprint.Doc
 import           Data.Text.Prettyprint.Doc.Render.Terminal
-import           Control.Monad.Reader
+import           Data.Time
 
 import           Calz.DateUtil
 import           Calz.Types
 
 data R = R
-  { formatConfig :: Config
+  { formatConfig     :: Config
   , formatDatePhrase :: DatePhrase
-  , formatToday :: Day
+  , formatToday      :: Day
   }
 type M a = Reader R a
 
