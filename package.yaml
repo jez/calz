@@ -1,0 +1,60 @@
+name:                calz
+version:             0.1.0.0
+github:              jez/calz
+license:             BSD3
+author:              Jake Zimmerman
+maintainer:          zimmerman.jake@gmail.com
+copyright:           2018 Jake Zimmerman
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+synopsis:            Like the Unix cal program, but better
+description:         Please see the README on Github at <https://github.com/jez/calz#readme>
+category:            System
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Wmissing-signatures
+- -Werror
+- -funbox-strict-fields
+
+dependencies:
+- base >= 4.7 && < 5
+- docopt
+- time
+- parsec
+- monadplus
+- lens
+- mtl
+- text
+- prettyprinter
+- prettyprinter-ansi-terminal
+
+
+library:
+  source-dirs: src
+
+executables:
+  calz:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - calz
+
+tests:
+  calz-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - calz
