@@ -14,7 +14,7 @@ To build this project from source, use Haskell's [Stack].
 [Stack]: https://docs.haskellstack.org/en/stable/
 
 ```
-git clone https://github.com/jez/collate.git
+git clone https://github.com/jez/calz.git
 
 stack build && stack install
 ```
