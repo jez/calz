@@ -6,6 +6,8 @@ I'm a huge fan of the Unix `cal` program, but it has a limited set of features
 when it comes to colors and displaying date *ranges*. `calz` is an alternative
 to `cal` with a whole host of features and layouting options.
 
+<img src="screenshot.png" alt="calz screenshot" width="305px">
+
 
 ## Install
 
