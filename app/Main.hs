@@ -3,6 +3,7 @@
 
 module Main where
 
+import           Control.Monad                             (when)
 import           Data.List                                 (intercalate)
 import qualified Data.Text                                 as T
 import           Data.Text.Prettyprint.Doc.Render.Terminal (putDoc)
@@ -32,6 +33,7 @@ Options:
   -H, --no-labels        Don't show month labels
   -P, --no-pad           Complete the first and last weeks of every month with
                          the first and last days of surrounding months
+  -h, --help             Show this help message
 
 Phrase:
   calz <month> [<year>]
@@ -60,6 +62,8 @@ main = do
 
   -- helpers
   let hasOption opt = isPresent args (longOption opt)
+
+  when (hasOption "help") (exitWithUsage patterns)
 
   -- layout has two dependent options
   layout <- getArgOrExit args (longOption "layout") >>= \case
