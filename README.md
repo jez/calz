@@ -2,6 +2,24 @@
 
 > A feature-rich command line calendar tool
 
+I'm a huge fan of the Unix `cal` program, but it has a limited set of features
+when it comes to colors and displaying date *ranges*. `calz` is an alternative
+to `cal` with a whole host of features and layouting options.
+
+## Install
+
+To build this project from source, use Haskell's [Stack].
+
+[Stack]: https://docs.haskellstack.org/en/stable/
+
+```
+git clone https://github.com/jez/collate.git
+
+stack build && stack install
+```
+
+If you've packaged this software for your operating system, let me know and I
+can link to it from these instructions.
 
 ## Usage
 
