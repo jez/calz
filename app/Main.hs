@@ -12,7 +12,7 @@ import           System.Console.Docopt
 import           System.Environment                        (getArgs)
 
 import           Calz.DateUtil
-import           Calz.Formatter
+import           Calz.Layout.Flow
 import           Calz.Parser
 import           Calz.Types
 
@@ -94,4 +94,4 @@ main = do
         exitWithUsage patterns
       Right ft -> return ft
 
-  putDoc $ runFormatCalendar config fromTo today
+  putDoc $ layoutFlow config fromTo today

@@ -27,7 +27,7 @@ dependencies:
 - time
 - parsec
 - monadplus
-- lens
+- split
 - mtl
 - text
 - prettyprinter
