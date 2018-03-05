@@ -1,6 +1,6 @@
 # calz
 
-> A feature-rich command line calendar tool
+> A feature-rich command line cal alternative
 
 I'm a huge fan of the Unix `cal` program, but it has a limited set of features
 when it comes to colors and displaying date *ranges*. `calz` is an alternative
@@ -33,6 +33,9 @@ Usage:
   calz [options] [<phrase>...]
 
 Options:
+  -l, --layout=<layout>  Can be 'grid' or 'flow' [default: flow]
+  -n, --columns=<n>      If layout is 'grid': how many columns to use
+                         [default: 3]
   -C, --no-color         Disable all color
   -H, --no-labels        Don't show month labels
   -P, --no-pad           Complete the first and last weeks of every month with
@@ -61,16 +64,11 @@ possible. If you find yourself using a phrase that's not accepted, please open
 an issue.
 
 
-## TODO
+## Potential Future Features
 
-- Grid layout
-  - potentially handy: `transpose`, `chunksOf`
-- Highlight arbitrary dates
-  - must be ISO 8601 format
-  - read from stdin
-- Maybe, maybe not:
-  - display line separators between months
-  - customize colors with flags
+- Highlight arbitrary ISO-8601 dates provided on stdin
+- Display line separators between months in flow layout
+- Customize colors with flags
 
 
 ## License

@@ -77,6 +77,22 @@ groupByWeek days = groupBy sameSundayWeek days
 gridOfWeeks :: DatePhrase -> [[Day]]
 gridOfWeeks = groupByWeek . allDays . padDatePhrase
 
+-- | Get the month for a week
+--
+-- The month of a week is the month we'd display next to it in the calendar.
+-- So if the month increments from say January to February this week, this
+-- week's month is February.
+getMonthOfWeek :: [Day] -> (Integer, Int)
+getMonthOfWeek week = maximum $ map getMonth week
+
+-- | Return the long month name (i.e., "January") for a given month by number.
+--
+-- Takes a number between 1 - 12. Fails otherwise.
+getLongMonthName :: Int -> String
+-- This (!!) operation is safe because month number is always 1 - 12
+-- and months is length 12
+getLongMonthName monthIdx = fst $ (months defaultTimeLocale) !! (monthIdx - 1)
+
 
 ----- Annotations -------------------------------------------------------------
 
@@ -96,6 +112,7 @@ dayToDoc date = do
         else doc'
 
   let monthEnd = pred . nextMonth $ date
+  -- TODO(jez) Figure out a way to add EndOfMonthAnn anns between the days.
   let doc''' = if date >= from && diffDays monthEnd date < 7
         then annotate EndOfMonthAnn doc''
         else doc''

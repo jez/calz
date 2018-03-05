@@ -7,17 +7,8 @@ import           Data.Text.Prettyprint.Doc
 import           Data.Text.Prettyprint.Doc.Render.Terminal
 import           Data.Time
 
-import           Calz.DateUtil
-import           Calz.Types
 import           Calz.Layout.Util
-
--- | Get the month for a week
---
--- The month of a week is the month we'd display next to it in the calendar.
--- So if the month increments from say January to February this week, this
--- week's month is February.
-getMonthOfWeek :: [Day] -> (Integer, Int)
-getMonthOfWeek week = maximum $ map getMonth week
+import           Calz.Types
 
 -- | Check if two weeks share the same month
 --
@@ -49,17 +40,14 @@ withMonth :: [[Day]] -> (String, [[Day]])
 -- @month@ is non-empty because groupBy ensures each sublist is non-empty.
 withMonth [] = error "A month ([[Day]]) must have at least one week ([Day])"
 withMonth (month@(week:_)) =
-  let monthNumber   = snd $ getMonthOfWeek week
-      -- This (!!) operation is safe because month number is always 1 - 12
-      -- and months has 12 months
-      longMonghName = fst $ (months defaultTimeLocale) !! (monthNumber - 1)
-  in  (longMonghName, month)
+  let monthIdx = snd $ getMonthOfWeek week
+  in  (getLongMonthName monthIdx, month)
 
 withMonths :: [[[Day]]] -> [(String, [[Day]])]
 withMonths ms = map withMonth ms
 
 monthNameFill :: Int
-monthNameFill = maximum . map (length . fst) $ months defaultTimeLocale
+monthNameFill = 1 + (maximum . map (length . fst) $ months defaultTimeLocale)
 
 formatMonth :: (String, [[Day]]) -> M (Doc Annotation)
 formatMonth (monthName, monthGrid) = do
@@ -69,6 +57,7 @@ formatMonth (monthName, monthGrid) = do
   if hideLabels
     then return grid
     else do
+      -- TODO(jez) Show the year next to January if there are multiple years.
       -- Don't show a label if there's only one week in this month grid
       let label = fill monthNameFill $ if length monthGrid == 1
             then emptyDoc
@@ -77,10 +66,11 @@ formatMonth (monthName, monthGrid) = do
 
 formatCalendar :: M (Doc Annotation)
 formatCalendar = do
-  phrase <- formatDatePhrase <$> ask
-  let header =
-        fill monthNameFill emptyDoc
-          <+> (annotate HeaderAnn $ pretty "Su Mo Tu We Th Fr Sa")
+  hideLabels <- optHideLabels . formatConfig <$> ask
+  phrase     <- formatDatePhrase <$> ask
+  let weekdaysHeader = annotate HeaderAnn $ pretty "Su Mo Tu We Th Fr Sa"
+  let header = weekdaysHeader
+        <> if hideLabels then emptyDoc else fill monthNameFill emptyDoc
   let grid =
         withMonths
           . groupWeeksByMonth
@@ -102,5 +92,4 @@ jan21 = fromGregorian 2018 01 21
 mar01 = fromGregorian 2018 03 01
 
 layoutFlowDebug :: Doc AnsiStyle
-layoutFlowDebug =
-  layoutFlow defaultConfig (DatePhrase jan01 mar01) jan21
+layoutFlowDebug = layoutFlow defaultConfig (DatePhrase jan01 mar01) jan21

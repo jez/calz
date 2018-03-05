@@ -13,6 +13,7 @@ import           System.Environment                        (getArgs)
 
 import           Calz.DateUtil
 import           Calz.Layout.Flow
+import           Calz.Layout.Grid
 import           Calz.Parser
 import           Calz.Types
 
@@ -39,7 +40,9 @@ Phrase:
   calz <month> [<year>]
   calz <year>
   calz (last|this|next) (month|year)
+  calz last <n> (months|years)
   calz <n> (months|years) ago
+  calz next <n> (months|years)
   calz <n> (months|years) from (now|today)
   calz from <phrase>... to <phrase>...
 
@@ -66,10 +69,15 @@ main = do
   when (hasOption "help") (exitWithUsage patterns)
 
   -- layout has two dependent options
-  layout <- getArgOrExit args (longOption "layout") >>= \case
+  layoutOpt <- getArgOrExit args (longOption "layout") >>= \case
     "grid" -> Grid . read <$> getArgOrExit args (longOption "columns")
     "flow" -> return . Flow $ hasOption "separators"
     val    -> exitMsg $ "--layout must be 'flow' or 'grid'; found: " ++ val
+
+  let layoutFn =
+        case layoutOpt of
+          Grid _ -> layoutGrid
+          Flow _ -> layoutFlow
 
   -- simple boolean options
   let color      = not $ hasOption "no-color"
@@ -77,7 +85,7 @@ main = do
   let hidePad    = hasOption "no-pad"
 
   -- Done with config
-  let config     = Config layout color hideLabels hidePad
+  let config     = Config layoutOpt color hideLabels hidePad
 
   -- Parse phrase to get month range
   today <- localDay . zonedTimeToLocalTime <$> getZonedTime
@@ -94,4 +102,4 @@ main = do
         exitWithUsage patterns
       Right ft -> return ft
 
-  putDoc $ layoutFlow config fromTo today
+  putDoc $ layoutFn config fromTo today
