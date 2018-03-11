@@ -11,6 +11,19 @@ to `cal` with a whole host of features and layouting options.
 
 ## Install
 
+### Using Homebrew
+
+```
+brew install jez/formulae/calz
+```
+
+### On Linux
+
+Check the [Releases](https://github.com/jez/calz/releases) page for pre-built
+64 bit binaries for Linux (note you'll also need libgmp installed).
+
+### From Source
+
 To build this project from source, use Haskell's [Stack].
 
 [Stack]: https://docs.haskellstack.org/en/stable/
