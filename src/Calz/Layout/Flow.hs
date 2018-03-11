@@ -46,8 +46,8 @@ withMonth (month@(week:_)) =
 withMonths :: [[[Day]]] -> [(String, [[Day]])]
 withMonths ms = map withMonth ms
 
-monthNameFill :: Int
-monthNameFill = 1 + (maximum . map (length . fst) $ months defaultTimeLocale)
+monthNamePad :: Int
+monthNamePad = 1 + (maximum . map (length . fst) $ months defaultTimeLocale)
 
 formatMonth :: (String, [[Day]]) -> M (Doc Annotation)
 formatMonth (monthName, monthGrid) = do
@@ -59,7 +59,7 @@ formatMonth (monthName, monthGrid) = do
     else do
       -- TODO(jez) Show the year next to January if there are multiple years.
       -- Don't show a label if there's only one week in this month grid
-      let label = fill monthNameFill $ if length monthGrid == 1
+      let label = fill monthNamePad $ if length monthGrid == 1
             then emptyDoc
             else annotate LabelAnn $ pretty monthName
       return $ label <+> align grid
@@ -69,8 +69,9 @@ formatCalendar = do
   hideLabels <- optHideLabels . formatConfig <$> ask
   phrase     <- formatDatePhrase <$> ask
   let weekdaysHeader = annotate HeaderAnn $ pretty "Su Mo Tu We Th Fr Sa"
-  let header = weekdaysHeader
-        <> if hideLabels then emptyDoc else fill monthNameFill emptyDoc
+  let header = if hideLabels
+        then weekdaysHeader
+        else fill monthNamePad emptyDoc <+> weekdaysHeader
   let grid =
         withMonths
           . groupWeeksByMonth

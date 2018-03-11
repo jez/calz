@@ -27,7 +27,7 @@ data DatePhrase = DatePhrase
   { monthFrom :: Day -- ^ Inclusive
   , monthTo   :: Day -- ^ Exclusive
   }
-  deriving Show
+  deriving (Show, Eq)
 
 data Annotation
   = HeaderAnn

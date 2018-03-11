@@ -2,7 +2,7 @@
 {-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Calz.Parser (parsePhrase, parseWithEof) where
+module Calz.PhraseParser (parsePhrase, parseWithEof) where
 
 import           Control.Monad.Reader
 import           Data.Char            (toLower)
