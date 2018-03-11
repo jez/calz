@@ -72,13 +72,14 @@ script:
 before_deploy:
 - stack --no-terminal install
 - cp "$TRAVIS_BUILD_DIR/README.md" "$TRAVIS_BUILD_DIR/LICENSE" "$HOME/.local/bin"
-- tar czf "$TRAVIS_BUILD_DIR/calz-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz" -C "$HOME/.local/bin" "./calz" "./README.md" "./LICENSE"
+- cd "$HOME/.local/bin"
+- tar czf "calz-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz" calz README.md LICENSE
 
 deploy:
   provider: releases
   api_key:
     secure: 1hxoP674XYj8idP+Kmobh0i6AZw2YRcSAETWzwG4s0Ma4D6cAawlfwS0k3bEAmMx3Bh+aNlhQfuPdxxZTAud4zP/SdFFfd6XPmCY86KD5l+zIZ9qqFYYIqDBHVDE7Uop0bIgP4/OPixqNRhr2odRWO/EyzmPZOgREMorPd2jwucYLP6AMIVkuDN/JNAmQ0dcleY4ymIU6MXuhxagNFkF/XiQWV2F8QlnTcHZq9sJ8pqW7Mlmd07PlLjjGhbFYbcXjSCEANW7Hsa4TJOsD36JFmPyuIF1Kx3ZfNXo37hyt7eUA3/bWKzTZW8/o5kiKRfdi/XPGReb/aEEOKrXB/iLduyx4mYpHUgOJD4sxQ8CJDjtgooc9d9dA+2pa8AW1/0JmA6YAifKB9hD8O4q6RuZ4T+2sTz2DihHkHx4sSi0fI3hq2pS1mWn61Jz61mtnFqH2RPWRXGKKa7ylpjAQ9VYRNkBiAdJGb1bpcMn/LMDJXqrtupOTRUmAzG1PPqbCSqex2Icm+SJaYmcuMmp/ALJHkE8aPH+ilLNKsH2u2nzAi1gd9X+jvxGDVbno3L4EcGMXsHS3ighbYeT9fAMuL4xxl/1UJS257m5aXad2tRtpcKdLOnzuleMBwr/H0dLlA9iEWnVIFv6ofasOk2U0AIk+haSX3z5qTMJPmh2K+V2u+g=
-  file: "$TRAVIS_BUILD_DIR/calz-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz"
+  file: "$HOME/.local/bin/calz-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz"
   on:
     tags: true
     repo: jez/calz
