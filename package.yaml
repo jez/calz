@@ -1,13 +1,14 @@
 name:                calz
-version:             0.1.0.0
+version:             0.9.0.0
 github:              jez/calz
-license:             BSD3
+license:             MIT
 author:              Jake Zimmerman
 maintainer:          zimmerman.jake@gmail.com
 copyright:           2018 Jake Zimmerman
 
 extra-source-files:
 - README.md
+- LICENSE
 
 # Metadata used when publishing your package
 synopsis:            Like the Unix cal program, but better
