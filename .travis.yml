@@ -72,7 +72,7 @@ script:
 before_deploy:
 - stack --no-terminal install
 - cp "$TRAVIS_BUILD_DIR/README.md" "$TRAVIS_BUILD_DIR/LICENSE" "$HOME/.local/bin"
-- tar czf "$TRAVIS_BUILD_DIR/calz-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz" -C "$HOME/.local/bin/calz" "./calz" "./README.md" "./LICENSE"
+- tar czf "$TRAVIS_BUILD_DIR/calz-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz" -C "$HOME/.local/bin" "./calz" "./README.md" "./LICENSE"
 
 deploy:
   provider: releases
