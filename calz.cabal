@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f6e10b31d98adfa25b367c06089d95c4150163887791551c3861205eaeefab3c
+-- hash: 2d18c464d5bcea526ce64dee21a8aa16d83d43dd19b4154505c47244d733d6fb
 
 name:           calz
 version:        0.9.0.0
@@ -30,7 +30,7 @@ source-repository head
 library
   hs-source-dirs:
       src
-  ghc-options: -Wall -Wcompat -Wmissing-signatures -Werror -funbox-strict-fields -optP-Wno-nonportable-include-path
+  ghc-options: -Wall -Wcompat -Wmissing-signatures -Werror -funbox-strict-fields -optP-Wno-nonportable-include-path -O2
   build-depends:
       base >=4.7 && <5
     , docopt
@@ -58,7 +58,7 @@ executable calz
   main-is: Main.hs
   hs-source-dirs:
       app
-  ghc-options: -Wall -Wcompat -Wmissing-signatures -Werror -funbox-strict-fields -optP-Wno-nonportable-include-path -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wmissing-signatures -Werror -funbox-strict-fields -optP-Wno-nonportable-include-path -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , calz
@@ -80,7 +80,7 @@ test-suite calz-test
   main-is: Spec.hs
   hs-source-dirs:
       test
-  ghc-options: -Wall -Wcompat -Wmissing-signatures -Werror -funbox-strict-fields -optP-Wno-nonportable-include-path -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wmissing-signatures -Werror -funbox-strict-fields -optP-Wno-nonportable-include-path -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , calz

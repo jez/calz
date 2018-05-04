@@ -23,6 +23,7 @@ ghc-options:
 - -funbox-strict-fields
 # TODO(jez) Remove this option once https://github.com/haskell/cabal/issues/4739 is fixed
 - -optP-Wno-nonportable-include-path
+- -O2
 
 dependencies:
 - base >= 4.7 && < 5
