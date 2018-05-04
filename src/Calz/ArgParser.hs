@@ -2,13 +2,11 @@
 {-# LANGUAGE LambdaCase       #-}
 {-# LANGUAGE QuasiQuotes      #-}
 
-module Calz.ArgParser (parseArgv, patterns) where
+module Calz.ArgParser (parseArgv, patterns, ArgvParseError(..)) where
 
 import           Control.Monad         (when)
 import           Control.Monad.Except
-import           Data.Either           (either)
 import           Data.List             (intercalate)
-import           Data.Maybe            (maybe)
 import qualified Data.Text             as T
 import           Data.Time
 import           System.Console.Docopt
@@ -35,6 +33,7 @@ Options:
   -P, --no-pad           Complete the first and last weeks of every month with
                          the first and last days of surrounding months
   -h, --help             Show this help message
+  -v, --version          Show version information
 
 Phrase:
   calz <month> [<year>]
@@ -53,33 +52,47 @@ Examples:
   from 2 months from now to next year
 |]
 
-parseArgsOrThrow :: MonadError String m => [String] -> m Arguments
-parseArgsOrThrow argv =
-  either (const $ throwError "") return $ parseArgs patterns argv
+data ArgvParseError
+  = HelpError String
+  | Version
+
+throwHelpError :: MonadError ArgvParseError m => String -> m a
+throwHelpError = throwError . HelpError
+
+parseArgsOrThrow :: MonadError ArgvParseError m => [String] -> m Arguments
+parseArgsOrThrow argv = case parseArgs patterns argv of
+  Left  _      -> throwHelpError ""
+  Right result -> return result
 
 hasOption' :: Arguments -> String -> Bool
 hasOption' args opt = isPresent args (longOption opt)
 
-getArgOrThrow' :: MonadError String m => Arguments -> Option -> m String
-getArgOrThrow' args opt = maybe (throwError "") return $ getArg args opt
+getArgOrThrow' :: MonadError ArgvParseError m => Arguments -> Option -> m String
+getArgOrThrow' args opt = case getArg args opt of
+  Nothing     -> throwHelpError ""
+  Just result -> return result
 
-parseArgv :: MonadError String m => Day -> [String] -> m (Config, DatePhrase)
+parseArgv
+  :: MonadError ArgvParseError m => Day -> [String] -> m (Config, DatePhrase)
 parseArgv today argv = do
-  args  <- parseArgsOrThrow argv
+  args <- parseArgsOrThrow argv
 
   -- helpers
-  let hasOption = hasOption' args
+  let hasOption     = hasOption' args
       getArgOrThrow = getArgOrThrow' args
 
   -- exit immediately if we see the '--help' flag
-  when (hasOption "help") (throwError "")
+  when (hasOption "help")    (throwHelpError "")
+
+  -- exit immediately if we see the '--version' flag
+  when (hasOption "version") (throwError Version)
 
   -- layout has two dependent options (it would be nice if docopt were smart
   -- enough to know that this will never fail, so we could omit getArgOrThrow)
   layoutOpt <- getArgOrThrow (longOption "layout") >>= \case
     "grid" -> Grid . read <$> getArgOrThrow (longOption "columns")
     "flow" -> return . Flow $ hasOption "separators"
-    val    -> throwError $ "--layout must be 'flow' or 'grid'; found: " ++ val
+    val -> throwHelpError $ "--layout must be 'flow' or 'grid'; found: " ++ val
 
   -- simple boolean options
   let color      = not $ hasOption "no-color"
@@ -97,7 +110,7 @@ parseArgv today argv = do
           end   = addMonth start
       in  return $ DatePhrase start end
     else case parsePhrase today phrase of
-      Left _  -> throwError $ "Could't parse phrase: " ++ T.unpack phrase
+      Left  _ -> throwHelpError $ "Could't parse phrase: " ++ T.unpack phrase
       Right x -> return x
 
   return (config, fromTo)

@@ -4,17 +4,24 @@ module Main where
 
 import           Data.Text.Prettyprint.Doc.Render.Terminal (putDoc)
 import           Data.Time
+import           Data.Version                              (showVersion)
 import           System.Console.Docopt
 import           System.Environment                        (getArgs)
+import           System.Exit                               (exitSuccess)
 
 import           Calz.ArgParser
 import           Calz.Layout.Flow
 import           Calz.Layout.Grid
 import           Calz.Types
+import           Paths_calz                                (version)
 
 parseArgvOrThrow :: Day -> [String] -> IO (Config, DatePhrase)
-parseArgvOrThrow today argv =
-  either (exitWithUsageMessage patterns) return $ parseArgv today argv
+parseArgvOrThrow today argv = case parseArgv today argv of
+  Left (HelpError message) -> exitWithUsageMessage patterns message
+  Left Version             -> do
+    putStrLn . showVersion $ version
+    exitSuccess
+  Right parsed -> return parsed
 
 main :: IO ()
 main = do
