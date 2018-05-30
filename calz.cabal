@@ -2,10 +2,10 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2d18c464d5bcea526ce64dee21a8aa16d83d43dd19b4154505c47244d733d6fb
+-- hash: e9853457b61bf2c901811e4afe8463aeb2491d0af48a74d3c7710492149de193
 
 name:           calz
-version:        0.9.0.0
+version:        0.9.1.0
 synopsis:       Like the Unix cal program, but better
 description:    Please see the README on Github at <https://github.com/jez/calz#readme>
 category:       System
