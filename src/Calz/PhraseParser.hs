@@ -192,7 +192,7 @@ compoundPhrase = do
   return $ DatePhrase startStart endEnd
 
 simpleOrCompoundPhrase :: M DatePhrase
-simpleOrCompoundPhrase = try simplePhrase <|> try compoundPhrase
+simpleOrCompoundPhrase = try compoundPhrase <|> try simplePhrase
 
 parseWith :: Day -> M a -> T.Text -> Either ParseError a
 parseWith today parser phrase =
