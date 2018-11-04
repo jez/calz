@@ -1,8 +1,11 @@
 {-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Calz.PhraseParser (parsePhrase, parseWithEof) where
+module Calz.PhraseParser
+  ( parsePhrase
+  , parseWithEof
+  )
+where
 
 import           Control.Monad.Reader
 import           Data.Char            (toLower)
@@ -66,7 +69,7 @@ monthAndYearPhrase = do
 
 monthPhrase :: M DatePhrase
 monthPhrase = do
-  currYear <- getYear <$> ask
+  currYear <- asks getYear
   m        <- month
   let start = firstDayOfMonth (currYear, m)
   let end   = addMonth start
@@ -83,7 +86,7 @@ yearPhrase = do
 todayNow :: M DatePhrase
 todayNow = do
   today <- ask
-  _     <- (try $ text "today") <|> (try $ text "now")
+  _     <- try (text "today") <|> try (text "now")
   let start = thisMonth today
   let end   = addMonth start
   return $ DatePhrase start end
@@ -130,10 +133,10 @@ relativeMonths = do
 
 relativeYears :: M DatePhrase
 relativeYears = do
-  currYear <- getYear <$> ask
+  currYear <- asks getYear
   offset   <- relativeUnit "year"
   let thisYear = firstDayOfMonth (currYear, january)
-  let start    = addGregorianMonthsClip (offset * 12) thisYear
+  let start = addGregorianMonthsClip (offset * 12) thisYear
   let end      = addYear start
   return $ DatePhrase start end
 
@@ -142,7 +145,7 @@ lastNextNMonths = do
   today  <- ask
   -- This is a clever trick: premultiply lastThisNext offset into 'n'
   -- (so nUnits can be forwards OR backwards)
-  offset <- ((*) <$> lastThisNext <*> (spaces1 *> nUnits "month"))
+  offset <- (*) <$> lastThisNext <*> (spaces1 *> nUnits "month")
   let thisMonth' = thisMonth today
   if offset < 0
     then do
@@ -154,10 +157,10 @@ lastNextNMonths = do
 
 lastNextNYears :: M DatePhrase
 lastNextNYears = do
-  currYear <- getYear <$> ask
+  currYear <- asks getYear
   -- This is a clever trick: premultiply lastThisNext offset into 'n'
   -- (so nUnits can be forwards OR backwards)
-  offset   <- ((*) <$> lastThisNext <*> (spaces1 *> nUnits "year"))
+  offset   <- (*) <$> lastThisNext <*> (spaces1 *> nUnits "year")
   let thisYear = firstDayOfMonth (currYear, january)
   if offset < 0
     then do

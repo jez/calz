@@ -1,8 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.20.0.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e9853457b61bf2c901811e4afe8463aeb2491d0af48a74d3c7710492149de193
+-- hash: 5504c1fedc2447e6435b2cd30e97b624a198a72273441efb653a2799aa65b036
 
 name:           calz
 version:        0.9.1.0
@@ -18,7 +18,6 @@ license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
-
 extra-source-files:
     LICENSE
     README.md
