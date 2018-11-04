@@ -185,7 +185,7 @@ simplePhrase =
 
 compoundPhrase :: M DatePhrase
 compoundPhrase = do
-  text "from" *> spaces1
+  optional (text "from" *> spaces1)
   DatePhrase startStart _ <- simplePhrase
   spaces1 *> text "to" *> spaces1
   DatePhrase _ endEnd <- simplePhrase

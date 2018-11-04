@@ -56,6 +56,8 @@ testCases =
   , ("feb2019"                      , bad)
   , ("from last month to next month", good dec01_17 mar01)
   , ("from last month to this month", good dec01_17 feb01)
+  , ("last month to next month"     , good dec01_17 mar01)
+  , ("last month to this month"     , good dec01_17 feb01)
   , ("jan"                          , good jan01 feb01)
   , ("last  month"                  , good dec01_17 jan01)
   , ("last  year"                   , good jan01_17 jan01)
