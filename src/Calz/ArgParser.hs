@@ -43,6 +43,7 @@ Phrase:
   calz next <n> (months|years)
   calz <n> (months|years) from (now|today)
   calz from <phrase>... to <phrase>...
+  calz <phrase>... to <phrase>...
 
 Examples:
   dec 2017
