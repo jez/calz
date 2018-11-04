@@ -43,13 +43,13 @@ type M a = Reader R a
 
 -- | Safe list head
 hd :: [a] -> Maybe a
-hd []    = Nothing
-hd (x:_) = Just x
+hd []      = Nothing
+hd (x : _) = Just x
 
 -- | Safe list tail
 tl :: [a] -> Maybe [a]
-tl []     = Nothing
-tl (_:xs) = Just xs
+tl []       = Nothing
+tl (_ : xs) = Just xs
 
 
 ----- DatePhrases -------------------------------------------------------------

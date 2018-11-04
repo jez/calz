@@ -6,7 +6,6 @@ module Calz.ArgParser (parseArgv, patterns, ArgvParseError(..)) where
 
 import           Control.Monad         (when)
 import           Control.Monad.Except
-import           Data.List             (intercalate)
 import qualified Data.Text             as T
 import           Data.Time
 import           System.Console.Docopt
@@ -103,7 +102,7 @@ parseArgv today argv = do
   let config     = Config layoutOpt color hideLabels hidePad
 
   -- Parse phrase to get month range
-  let phrase = T.pack $ intercalate " " . getAllArgs args $ argument "phrase"
+  let phrase = T.pack $ unwords . getAllArgs args $ argument "phrase"
   fromTo <- if getArgCount args (argument "phrase") == 0
     then
       let start = thisMonth today
